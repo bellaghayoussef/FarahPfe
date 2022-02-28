@@ -1,0 +1,32 @@
+[
+    {
+        "model-name": "User",
+        "resource-file": "users.json",
+        "table-name": "users"
+    },
+    {
+        "model-name": "offre",
+        "resource-file": "offres.json",
+        "table-name": "offres"
+    },
+    {
+        "model-name": "techno",
+        "resource-file": "technos.json",
+        "table-name": "technos"
+    },
+    {
+        "model-name": "certif",
+        "resource-file": "certifs.json",
+        "table-name": "certifs"
+    },
+    {
+        "model-name": "domain",
+        "resource-file": "domains.json",
+        "table-name": "domains"
+    },
+    {
+        "model-name": "role",
+        "resource-file": "roles.json",
+        "table-name": "roles"
+    }
+]
