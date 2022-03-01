@@ -4,12 +4,12 @@
 
     <div class="panel panel-default">
   
-        <div class="panel-heading clearfix">
+        <div class="panel-header clearfix">
 
-            <div class="pull-left">
+            <div class="float-left">
                 <h4 class="mt-5 mb-5">{{ !empty($domain->title) ? $domain->title : 'Domain' }}</h4>
             </div>
-            <div class="btn-group btn-group-sm pull-right" role="group">
+            <div class="btn-group btn-group-sm float-right" role="group">
 
                 <a href="{{ route('domains.domain.index') }}" class="btn btn-primary" title="Show All Domain">
                     <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>

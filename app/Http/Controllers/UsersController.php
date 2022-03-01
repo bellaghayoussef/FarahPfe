@@ -6,163 +6,384 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Exception;
-
+use Illuminate\Support\Facades\Hash;
+use Auth;
 class UsersController extends Controller
 {
-
-    /**
-     * Display a listing of the users.
+/**
+     * Display a listing of the resource.
      *
-     * @return Illuminate\View\View
+     * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function client()
     {
-        $users = User::paginate(25);
-
-        return view('users.index', compact('users'));
+        $users = User::whereHas("roles", function ($q) {
+            $q->where("name", "client");
+        })->get();
+        return view('user.client.index', compact('users'));
+    }
+    public function etudiant()
+    {
+        $users = User::whereHas("roles", function ($q) {
+            $q->where("name", "etudiant");
+        })->get();
+        return view('user.etudiant.index', compact('users'));
     }
 
     /**
-     * Show the form for creating a new user.
+     * Show the form for creating a new resource.
      *
-     * @return Illuminate\View\View
+     * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function createetudiant()
     {
-        
-        
-        return view('users.create');
+        return view('user.etudiant.create');
     }
 
     /**
-     * Store a new user in the storage.
+     * Store a newly created resource in storage.
      *
-     * @param Illuminate\Http\Request $request
-     *
-     * @return Illuminate\Http\RedirectResponse | Illuminate\Routing\Redirector
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        try {
-            
-            $data = $this->getData($request);
-            
-            User::create($data);
+        //
+    }
 
-            return redirect()->route('users.user.index')
-                ->with('success_message', 'User was successfully added.');
-        } catch (Exception $exception) {
 
-            return back()->withInput()
-                ->withErrors(['unexpected_error' => 'Unexpected error occurred while trying to process your request.']);
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+
+        $user = Auth::user();
+        if ($request->hasFile('avatar')) {
+            $avatar = time() . '.' . $request->avatar->extension();
+            $request->avatar->move(public_path('/images'), $avatar);
+            $avatar = 'images/' . $avatar;
+        } else {
+            $avatar = $user->avatar;
         }
+        if ($request->password != null) {
+
+            $user->password = Hash::make($request->password);
+        }
+        $user->nom = $request->nom;
+        $user->prenom = $request->prenom;
+        $user->email = $request->email;
+
+        $user->phone = $request->phone;
+        $user->cin = $request->cin;
+        $user->avatar = $avatar;
+        $user->save();
+        return redirect()->route('user');
     }
 
     /**
-     * Display the specified user.
+     * Remove the specified resource from storage.
      *
-     * @param int $id
-     *
-     * @return Illuminate\View\View
-     */
-    public function show($id)
-    {
-        $user = User::findOrFail($id);
-
-        return view('users.show', compact('user'));
-    }
-
-    /**
-     * Show the form for editing the specified user.
-     *
-     * @param int $id
-     *
-     * @return Illuminate\View\View
-     */
-    public function edit($id)
-    {
-        $user = User::findOrFail($id);
-        
-
-        return view('users.edit', compact('user'));
-    }
-
-    /**
-     * Update the specified user in the storage.
-     *
-     * @param int $id
-     * @param Illuminate\Http\Request $request
-     *
-     * @return Illuminate\Http\RedirectResponse | Illuminate\Routing\Redirector
-     */
-    public function update($id, Request $request)
-    {
-        try {
-            
-            $data = $this->getData($request);
-            
-            $user = User::findOrFail($id);
-            $user->update($data);
-
-            return redirect()->route('users.user.index')
-                ->with('success_message', 'User was successfully updated.');
-        } catch (Exception $exception) {
-
-            return back()->withInput()
-                ->withErrors(['unexpected_error' => 'Unexpected error occurred while trying to process your request.']);
-        }        
-    }
-
-    /**
-     * Remove the specified user from the storage.
-     *
-     * @param int $id
-     *
-     * @return Illuminate\Http\RedirectResponse | Illuminate\Routing\Redirector
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        try {
-            $user = User::findOrFail($id);
-            $user->delete();
-
-            return redirect()->route('users.user.index')
-                ->with('success_message', 'User was successfully deleted.');
-        } catch (Exception $exception) {
-
-            return back()->withInput()
-                ->withErrors(['unexpected_error' => 'Unexpected error occurred while trying to process your request.']);
-        }
+        //
     }
 
-    
+
+
+
     /**
-     * Get the request's data from the request.
+     * Display the specified resource.
      *
-     * @param Illuminate\Http\Request\Request $request 
-     * @return array
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
-    protected function getData(Request $request)
+    public function show_etudiant($id)
     {
-        $rules = [
-                'nom' => 'required|string|min:1|max:255',
-            'prenom' => 'required|string|min:1|max:255',
-            'email' => 'required|string|min:1|max:255',
-            'email_verified_at' => 'nullable|date_format:j/n/Y g:i A',
-            'password' => 'required|string|min:1|max:255',
-            'avatar' => 'required|file|string|min:1|max:255',
-            'phone' => 'required|string|min:1|max:255',
-            'remember_token' => 'nullable|string|min:0|max:100',
-            'niveau' => 'nullable|string|min:0|max:255',
-            'cin' => 'nullable|numeric|min:-2147483648|max:2147483647',
-            'post' => 'nullable|string|min:0|max:255',
-            'cv' => 'nullable|string|min:0|max:255', 
-        ];
-        
-        $data = $request->validate($rules);
-
-
-        return $data;
+        $user = User::find($id);
+        return view('user.etudiant.show', compact('user'));
     }
 
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function editetudiant($id)
+    {
+        $user = User::find($id);
+        return view('user.etudiant.edit', compact('user'));
+    }
+    public function store_etudiant(Request $request)
+    {
+
+        $user = new User();
+        if ($request->hasFile('avatar')) {
+            $avatar = time() . '.' . $request->avatar->extension();
+            $request->avatar->move(public_path('/images'), $avatar);
+            $avatar = 'images/' . $avatar;
+        } else {
+            $avatar = 'images/user.jpg';
+        }
+
+        $user->password = Hash::make($request->password);
+
+        $user->nom = $request->nom;
+        $user->prenom = $request->prenom;
+        $user->email = $request->email;
+
+        $user->phone = $request->phone;
+        $user->niveau = $request->niveau;
+        $user->matricule = $request->matricule;
+        $user->avatar = $avatar;
+        $user->save();
+        $user->assignRole('etudiant');
+        return redirect()->route('etudiant');
+    }
+
+    public function update_etudiant(Request $request, $id)
+    {
+
+        $user = User::find($id);
+        if ($request->hasFile('avatar')) {
+            $avatar = time() . '.' . $request->avatar->extension();
+            $request->avatar->move(public_path('/images'), $avatar);
+            $avatar = 'images/' . $avatar;
+        } else {
+            $avatar = $user->avatar;
+        }
+        if ($request->password != null) {
+            $user->password = Hash::make($request->password);
+        } else {
+            $user->password = $user->avatar;
+        }
+
+
+        $user->nom = $request->nom;
+        $user->prenom = $request->prenom;
+        $user->email = $request->email;
+
+        $user->phone = $request->phone;
+        $user->niveau = $request->niveau;
+        $user->matricule = $request->matricule;
+        $user->avatar = $avatar;
+        $user->save();
+        return redirect()->route('etudiant');
+    }
+
+
+    public function destroyetudiant(Request $request, $id)
+    {
+
+        $user = User::find($id);
+
+        $user->delete();
+        return redirect()->route('etudiant');
+    }
+
+
+    public function createclient()
+    {
+        return view('user.client.create');
+    }
+
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show_client($id)
+    {
+        $user = User::find($id);
+        return view('user.client.show', compact('user'));
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function editclient($id)
+    {
+        $user = User::find($id);
+        return view('user.client.edit', compact('user'));
+    }
+    public function store_client(Request $request)
+    {
+
+        $user = new User();
+        if ($request->hasFile('avatar')) {
+            $avatar = time() . '.' . $request->avatar->extension();
+            $request->avatar->move(public_path('/images'), $avatar);
+            $avatar = 'images/' . $avatar;
+        } else {
+            $avatar = 'images/user.jpg';
+        }
+
+        $user->password = Hash::make($request->password);
+
+        $user->nom = $request->nom;
+        $user->prenom = $request->prenom;
+        $user->email = $request->email;
+
+        $user->phone = $request->phone;
+        $user->cin = $request->cin;
+        $user->avatar = $avatar;
+        $user->save();
+        $user->assignRole('client');
+        return redirect()->route('client');
+    }
+
+    public function update_client(Request $request, $id)
+    {
+
+        $user = User::find($id);
+        if ($request->hasFile('avatar')) {
+            $avatar = time() . '.' . $request->avatar->extension();
+            $request->avatar->move(public_path('/images'), $avatar);
+            $avatar = 'images/' . $avatar;
+        } else {
+            $avatar = $user->avatar;
+        }
+        if ($request->password != null) {
+            $user->password = Hash::make($request->password);
+        } else {
+            $user->password = $user->avatar;
+        }
+
+
+        $user->nom = $request->nom;
+        $user->prenom = $request->prenom;
+        $user->email = $request->email;
+
+        $user->phone = $request->phone;
+        $user->cin = $request->cin;
+        $user->avatar = $avatar;
+        $user->save();
+        return redirect()->route('client');
+    }
+
+
+    public function destroyclient(Request $request, $id)
+    {
+
+        $user = User::find($id);
+
+        $user->delete();
+        return redirect()->route('client');
+    }
+
+
+
+
+
+
+
+
+
+    public function admin()
+    {
+        $users = User::whereHas("roles", function ($q) {
+            $q->where("name", "admin");
+        })->get();
+        return view('user.admin.index', compact('users'));
+    }
+
+    public function createadmin()
+    {
+        return view('user.admin.create');
+    }
+    public function show_admin($id)
+    {
+        $user = User::find($id);
+        return view('user.admin.show', compact('user'));
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function editadmin($id)
+    {
+        $user = User::find($id);
+        return view('user.admin.edit', compact('user'));
+    }
+    public function store_admin(Request $request)
+    {
+
+        $user = new User();
+        if ($request->hasFile('avatar')) {
+            $avatar = time() . '.' . $request->avatar->extension();
+            $request->avatar->move(public_path('/images'), $avatar);
+            $avatar = 'images/' . $avatar;
+        } else {
+            $avatar = 'images/user.jpg';
+        }
+
+        $user->password = Hash::make($request->password);
+
+        $user->nom = $request->nom;
+        $user->prenom = $request->prenom;
+        $user->email = $request->email;
+
+        $user->phone = $request->phone;
+
+        $user->avatar = $avatar;
+        $user->save();
+        $user->assignRole('admin');
+        return redirect()->route('admin');
+    }
+
+    public function update_admin(Request $request, $id)
+    {
+
+        $user = User::find($id);
+        if ($request->hasFile('avatar')) {
+            $avatar = time() . '.' . $request->avatar->extension();
+            $request->avatar->move(public_path('/images'), $avatar);
+            $avatar = 'images/' . $avatar;
+        } else {
+            $avatar = $user->avatar;
+        }
+        if ($request->password != null) {
+            $user->password = Hash::make($request->password);
+        } else {
+            $user->password = $user->avatar;
+        }
+
+
+        $user->nom = $request->nom;
+        $user->prenom = $request->prenom;
+        $user->email = $request->email;
+
+        $user->phone = $request->phone;
+
+        $user->avatar = $avatar;
+        $user->save();
+        return redirect()->route('admin');
+    }
+
+
+    public function destroyadmin(Request $request, $id)
+    {
+
+        $user = User::find($id);
+
+        $user->delete();
+        return redirect()->route('admin');
+    }
 }

@@ -14,28 +14,25 @@
         </div>
     @endif
 
-    <div class="panel panel-default">
+    <div class="card card-default">
 
-        <div class="panel-heading clearfix">
+   
 
-            <div class="pull-left">
-                <h4 class="mt-5 mb-5">Domains</h4>
-            </div>
 
-            <div class="btn-group btn-group-sm pull-right" role="group">
-                <a href="{{ route('domains.domain.create') }}" class="btn btn-success" title="Create New Domain">
-                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                </a>
-            </div>
+         <div class="card-header">
+                    <h3 class="card-title">Domains</h3>
+                    <a type="button" class="btn btn-success float-right" href="{{ route('domains.domain.create') }}"> <i
+                            class="fa fa-plus"></i></a>
+                </div>
 
-        </div>
+
         
         @if(count($domains) == 0)
-            <div class="panel-body text-center">
+            <div class="card-body text-center">
                 <h4>No Domains Available.</h4>
             </div>
         @else
-        <div class="panel-body panel-body-with-table">
+        <div class="card-body card-body-with-table">
             <div class="table-responsive">
 
                 <table class="table table-striped ">
@@ -59,14 +56,20 @@
 
                                     <div class="btn-group btn-group-xs pull-right" role="group">
                                         <a href="{{ route('domains.domain.show', $domain->id ) }}" class="btn btn-info" title="Show Domain">
-                                            <span class="glyphicon glyphicon-open" aria-hidden="true"></span>
+                                          
+                                       <i class="fa fa-eye">
+                             Détails</i>
+
+                                                      
                                         </a>
                                         <a href="{{ route('domains.domain.edit', $domain->id ) }}" class="btn btn-primary" title="Edit Domain">
-                                            <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                                              <i class="fa fa-edit">
+                                                    Modifier</i> 
+
                                         </a>
 
                                         <button type="submit" class="btn btn-danger" title="Delete Domain" onclick="return confirm(&quot;Click Ok to delete Domain.&quot;)">
-                                            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                                           <i class="fa fa-trash">Supprimer</i>
                                         </button>
                                     </div>
 
@@ -81,7 +84,7 @@
             </div>
         </div>
 
-        <div class="panel-footer">
+        <div class="card-footer">
             {!! $domains->render() !!}
         </div>
         

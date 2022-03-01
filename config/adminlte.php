@@ -227,33 +227,33 @@ return [
     'menu' => [
         // Navbar items:
 
-        [
+         [
             'text' => 'Dashboard',
             'url'  => 'home',
             'icon' => 'fas fa-tachometer-alt',
         ],
-        // [
-        //     'text' => 'Client',
-        //     'url'  => 'client',
-        //     'can'  => 'admin',
-        //     'icon' => 'fa fa-users',
-        // ],
-        // [
-        //     'text' => 'Admin',
-        //     'url'  => 'admin',
-        //     'can'  => 'admin',
-        //     'icon' => 'fa fa-users',
-        // ],
+        [
+            'text' => 'Client',
+            'url'  => 'client',
+            'can'  => 'admin',
+            'icon' => 'fa fa-users',
+        ],
+        [
+            'text' => 'Admin',
+            'url'  => 'admin',
+            'can'  => 'admin',
+            'icon' => 'fa fa-users',
+        ],
 
-        // [
-        //     'text' => 'Etudiant',
-        //     'url'  => 'etudiant',
-        //     'can'  => 'admin',
-        //     'icon' => 'fas fa-user-graduate',
-        // ],
+        [
+            'text' => 'Etudiant',
+            'url'  => 'etudiant',
+            'can'  => 'admin',
+            'icon' => 'fas fa-user-graduate',
+        ],
         [
             'text' => 'Certif',
-            'url'  => 'certifs',
+            'url'  => 'certif',
             'can'  => 'admin',
             'icon' => 'fas fa-briefcase',
         ],
@@ -266,42 +266,51 @@ return [
         ],
         [
             'text' => 'Techno',
-            'url'  => 'technos',
+            'url'  => 'techno',
             'can'  => 'admin',
             'icon' => 'fas fa-graduation-cap',
         ],
         [
             'text' => 'Offre',
-            'url'  => 'offres',
+            'url'  => 'offre',
             'can'  => 'admin',
             'icon' => 'fas fa-briefcase',
         ],
         [
             'text' => 'Profil',
-            'url'  => 'users',
+            'url'  => 'user',
             'can'  => 'admin',
             'icon' => 'fas fa-user-circle',
         ],
 
         [
             'text' => 'Offre',
-            'url'  => 'offres',
+            'url'  => 'offre',
             'can'  => 'client',
             'icon' => 'fas fa-briefcase',
         ],
-        // [
-        //     'text' => 'Etudiant',
-        //     'url'  => 'clientetudiant',
-        //     'can'  => 'client',
-        //     'icon' => 'fas fa-user-graduate',
-        // ],
-      
+        [
+            'text' => 'Etudiant',
+            'url'  => 'clientetudiant',
+            'can'  => 'client',
+            'icon' => 'fas fa-user-graduate',
+        ],
+        [
+            'text' => 'Etudiant Favori',
+            'url'  => 'etudiantfavori',
+            'can'  => 'client',
+            'icon' => 'fas fa-user-graduate',
+        ],
         [
             'text' => 'Profil',
             'url'  => 'user',
             'can'  => 'client',
             'icon' => 'fas fa-user-circle',
         ],
+       
+
+
+
         
          
       

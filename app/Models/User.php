@@ -30,8 +30,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'matricule',
         'niveau',
         'cin',
-        'organisme',
-        'pseudo',
+       
+        
         'cv'
 
     ];

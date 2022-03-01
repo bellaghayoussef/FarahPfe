@@ -18,3 +18,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+
+Route::post('/login', [App\Http\Controllers\Api\loginController::class, 'login']);
+Route::post('/register', [App\Http\Controllers\Api\loginController::class, 'register']);
+Route::middleware('auth:api')->group(function () {
+    Route::get('/home', [App\Http\Controllers\Api\homeController::class, 'index']);
+    Route::get('/postuler', [App\Http\Controllers\Api\homeController::class, 'postuler']);
+    Route::get('/getdonner', [App\Http\Controllers\Api\homeController::class, 'getdonneer']);
+    Route::get('/sychncro', [App\Http\Controllers\Api\homeController::class, 'sychncro']);
+    Route::post('/update', [App\Http\Controllers\Api\homeController::class, 'update']);
+});

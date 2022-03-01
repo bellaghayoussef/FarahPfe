@@ -9,11 +9,12 @@
     <meta name="robots" content="none">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
     <meta name="description" content="admin login">
-    <title>Farahpfe</title>
+    <title>FarahPfe</title>
+
     <link rel="stylesheet" href="{{ asset('/adminlogin/voyager-assets') }}">
     <style>
         body {
-            background-image: url('{{ asset('images/') }}');
+            background-image: url('https://d7ieeqxtzpkza.cloudfront.net/wp-content/uploads/2016/03/telecom_new.jpg');
             background-repeat: no-repeat !important;
             background-attachment: fixed !important;
             background-position: center !important;
@@ -98,7 +99,7 @@
                     <div class="col-sm-12 col-md-10 col-md-offset-2">
                         <div class="logo-title-container">
                             <img class="img-responsive pull-left flip logo hidden-xs animated fadeIn"
-                                src="{{ asset('images/') }}" style="    max-width: 158px!important;"
+                                src="https://cdn.1min30.com/wp-content/uploads/2019/03/Tunisie-Telecom-logo.jpg" style="    max-width: 158px!important;"
                                 alt="Logo Icon">
                             <div class="copy animated fadeIn">
 
@@ -239,25 +240,18 @@
                                             </span>
                                         @enderror
                                     </div>
-                                    <div class="form-group form-group-default focused">
-                                        <label>Catégorie</label>
-                                        <select class="form-control form-group-default" name="categorie" id="categorie">
-                                            <option style="background:#A0A0A0;">choisissez votre catégorie </option>
-                                            <option style="background:#A0A0A0;" value="client">Client</option>
-                                            <option style="background:#A0A0A0;" value="etudiant">Etudiant</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group form-group-default hidden focused" id="matricule">
-                                        <label>Matricule</label>
-                                        <input type="text" class="form-control form-group-default " name="matricule"
-                                            autocomplete="off" placeholder="matricule">
-                                        @error('matricule')
+                                  
+                                    <div class="form-group form-group-default  focused" id="cin">
+                                        <label>cin</label>
+                                        <input type="text" class="form-control form-group-default " name="cin"
+                                            autocomplete="off" placeholder="cin">
+                                        @error('cin')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
                                             </span>
                                         @enderror
                                     </div>
-                                    <div class="form-group form-group-default hidden focused" id="niveau">
+                                    <div class="form-group form-group-default  focused" id="niveau">
                                         <label>Niveau</label>
                                         <input type="text" class="form-control form-group-default " name="niveau"
                                             autocomplete="off" placeholder="niveau">
@@ -267,26 +261,8 @@
                                             </span>
                                         @enderror
                                     </div>
-                                    <div class="form-group form-group-default hidden focused" id="organisme">
-                                        <label>Organisme</label>
-                                        <input type="text" class="form-control form-group-default " name="organisme"
-                                            autocomplete="off" placeholder="organisme">
-                                        @error('organisme')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                        @enderror
-                                    </div>
-                                    <div class="form-group form-group-default hidden focused" id="cin">
-                                        <label>CIN</label>
-                                        <input type="number" class="form-control form-group-default " name="cin"
-                                            autocomplete="off" placeholder="cin">
-                                        @error('cin')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                        @enderror
-                                    </div>
+                                   
+                                 
                                     <button type="submit" class="btn btn-block login-button" name="register">
                                         <span class="signingin hidden"><span class="voyager-refresh"></span> Logging
                                             in...</span>
@@ -315,34 +291,7 @@
     <script type="text/javascript">
         //categorie pour séparer le client d'une coté et l'étudiant
 
-        $(document).ready(function() {
-
-
-
-            $('#categorie').change(function() {
-                console.log($(this).val());
-                if ($(this).val() == "client") {
-                    document.getElementById("organisme").classList.remove('hidden');
-                    document.getElementById("cin").classList.remove('hidden');
-                    document.getElementById("matricule").classList.add('hidden');
-                    document.getElementById("niveau").classList.add('hidden');
-
-                }
-                if ($(this).val() == "etudiant") {
-
-                    document.getElementById("matricule").classList.remove('hidden');
-                    document.getElementById("niveau").classList.remove('hidden');
-                    document.getElementById("organisme").classList.add('hidden');
-                    document.getElementById("cin").classList.add('hidden');
-
-                }
-
-
-
-            });
-
-
-        });
+        
 
     </script>
 </body>

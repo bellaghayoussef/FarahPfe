@@ -11,147 +11,99 @@ class CertifsController extends Controller
 {
 
     /**
-     * Display a listing of the certifs.
+     * Display a listing of the resource.
      *
-     * @return Illuminate\View\View
+     * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        $certifs = certif::paginate(25);
-
-        return view('certifs.index', compact('certifs'));
+        $certifs = Certif::all();
+        return view('certif.index', compact('certifs'));
     }
 
     /**
-     * Show the form for creating a new certif.
+     * Show the form for creating a new resource.
      *
-     * @return Illuminate\View\View
+     * @return \Illuminate\Http\Response
      */
     public function create()
     {
-        
-        
-        return view('certifs.create');
+        return view('certif.create');
     }
 
     /**
-     * Store a new certif in the storage.
+     * Store a newly created resource in storage.
      *
-     * @param Illuminate\Http\Request $request
-     *
-     * @return Illuminate\Http\RedirectResponse | Illuminate\Routing\Redirector
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        try {
-            
-            $data = $this->getData($request);
-            
-            certif::create($data);
 
-            return redirect()->route('certifs.certif.index')
-                ->with('success_message', 'Certif was successfully added.');
-        } catch (Exception $exception) {
+        $validated = $request->validate([
+            'titre' => ['required', 'string', 'max:255', 'unique:certifs'],
 
-            return back()->withInput()
-                ->withErrors(['unexpected_error' => 'Unexpected error occurred while trying to process your request.']);
-        }
+        ]);
+
+        $certif = new Certif();
+        $certif->titre = $request->titre;
+        $certif->save();
+        return redirect()->route('certif.index')
+            ->with('success_message', 'certif was successfully added.');
     }
 
     /**
-     * Display the specified certif.
+     * Display the specified resource.
      *
-     * @param int $id
-     *
-     * @return Illuminate\View\View
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        $certif = certif::findOrFail($id);
-
-        return view('certifs.show', compact('certif'));
+        $certif = Certif::find($id);
+        return view('certif.show', compact('certif'));
     }
 
     /**
-     * Show the form for editing the specified certif.
+     * Show the form for editing the specified resource.
      *
-     * @param int $id
-     *
-     * @return Illuminate\View\View
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        $certif = certif::findOrFail($id);
-        
-
-        return view('certifs.edit', compact('certif'));
+        $certif = Certif::find($id);
+        return view('certif.edit', compact('certif'));
     }
 
     /**
-     * Update the specified certif in the storage.
+     * Update the specified resource in storage.
      *
-     * @param int $id
-     * @param Illuminate\Http\Request $request
-     *
-     * @return Illuminate\Http\RedirectResponse | Illuminate\Routing\Redirector
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
-    public function update($id, Request $request)
+    public function update(Request $request, $id)
     {
-        try {
-            
-            $data = $this->getData($request);
-            
-            $certif = certif::findOrFail($id);
-            $certif->update($data);
 
-            return redirect()->route('certifs.certif.index')
-                ->with('success_message', 'Certif was successfully updated.');
-        } catch (Exception $exception) {
 
-            return back()->withInput()
-                ->withErrors(['unexpected_error' => 'Unexpected error occurred while trying to process your request.']);
-        }        
+        $certif =  Certif::find($id);
+        $certif->titre = $request->titre;
+        $certif->save();
+        return redirect()->route('certif.index');
     }
 
     /**
-     * Remove the specified certif from the storage.
+     * Remove the specified resource from storage.
      *
-     * @param int $id
-     *
-     * @return Illuminate\Http\RedirectResponse | Illuminate\Routing\Redirector
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        try {
-            $certif = certif::findOrFail($id);
-            $certif->delete();
+        $certif =  Certif::find($id);
 
-            return redirect()->route('certifs.certif.index')
-                ->with('success_message', 'Certif was successfully deleted.');
-        } catch (Exception $exception) {
-
-            return back()->withInput()
-                ->withErrors(['unexpected_error' => 'Unexpected error occurred while trying to process your request.']);
-        }
+        $certif->delete();
+        return redirect()->route('certif.index');
     }
-
-    
-    /**
-     * Get the request's data from the request.
-     *
-     * @param Illuminate\Http\Request\Request $request 
-     * @return array
-     */
-    protected function getData(Request $request)
-    {
-        $rules = [
-                'titre' => 'required|string|min:1|max:255', 
-        ];
-        
-        $data = $request->validate($rules);
-
-
-        return $data;
-    }
-
 }

@@ -1,16 +1,18 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Topic;
+
+use App\Http\Controllers\Controller;
+use App\Models\User;
+use App\Models\offre;
 use Illuminate\Http\Request;
-use App\Models\Offre;
+use Exception;
 use App\Models\Techno;
 use Auth;
-use App\Models\Test;
-use App\Models\TestAnswer;
 class OffresController extends Controller
 {
-    /**
+
+  /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -28,7 +30,7 @@ class OffresController extends Controller
         }
 
 
-        return view('offres.index',compact('offres'));
+        return view('offre.index',compact('offres'));
     }
 
     /**
@@ -39,15 +41,9 @@ class OffresController extends Controller
     public function create()
     {
         $technos = Techno::all();
-        if(Auth::User()->hasRole('admin')){
-            $topics = Topic::all();
-        }
-        if(Auth::User()->hasRole('client')){
-            $topics = Topic::where('user_id','=',Auth::User()->id)->orWhere('user_id',null)->get();
+      
 
-        }
-
-        return view('offres.create',compact('technos','topics'));
+        return view('offre.create',compact('technos'));
     }
 
     /**
@@ -74,20 +70,7 @@ class OffresController extends Controller
         $offre->salaire = $request->salaire;
         $offre->deadline = $request->deadline;
         $offre->description = $request->description;
-        if($request->type == '1'){
-            $offre->test = '1';
-            $offre->test_id = $request->qcm;
-        }elseif($request->type == '2'){
-            $offre->test = '2';
-           if ($request->hasFile('pdf')) {
-        $pdf = time() . '.' . $request->pdf->extension();
-        $request->pdf->move(public_path('test'), $pdf);
-        $offre->lien = $pdf;
-           }
-        }else{
-            $offre->test = '0';
-           }
-
+        
 
 
         $offre->save();
@@ -141,12 +124,7 @@ class OffresController extends Controller
     public function update(Request $request, $id)
     {
         $offre =  Offre::find($id);
-       if ($request->hasFile('pdf')) {
-        $pdf = time() . '.' . $request->pdf->extension();
-        $request->pdf->move(public_path('test'), $pdf);
-        $offre->test = $pdf;
-    }
-
+       
         $offre->poste = $request->poste;
         $offre->salaire = $request->salaire;
         $offre->deadline = $request->deadline;
@@ -186,14 +164,10 @@ class OffresController extends Controller
     public function candidats($id)
     {
         $offre =  Offre::find($id);
-        if($offre->test == '2'){
+        
             return view('offre.candidats',compact('offre'));
-        }elseif($offre->test == '1'){
-            $results = Test::where('offre_id',$id)->get();
-
-
-            return view('results.index', compact('results'));
-        }
+        
 
     }
+
 }

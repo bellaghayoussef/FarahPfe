@@ -2,23 +2,19 @@
 
 @section('content')
 
-    <div class="panel panel-default">
+    <div class="card card-default">
 
-        <div class="panel-heading clearfix">
-            
-            <span class="pull-left">
-                <h4 class="mt-5 mb-5">Create New Domain</h4>
-            </span>
+      
 
-            <div class="btn-group btn-group-sm pull-right" role="group">
-                <a href="{{ route('domains.domain.index') }}" class="btn btn-primary" title="Show All Domain">
-                    <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
-                </a>
-            </div>
 
-        </div>
+ <div class="card-header">
+                    <h3 class="card-title">Create New Domain</h3>
+                    <a type="button" class="btn btn-success float-right" href="{{ route('domains.domain.index') }}"> <i
+                            class="fa fa-list"></i></a>
+                </div>
 
-        <div class="panel-body">
+
+        <div class="card-body">
         
             @if ($errors->any())
                 <ul class="alert alert-danger">
@@ -36,7 +32,7 @@
 
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
-                        <input class="btn btn-primary" type="submit" value="Add">
+                        <input class="btn btn-primary float-right" type="submit" value="Add">
                     </div>
                 </div>
 

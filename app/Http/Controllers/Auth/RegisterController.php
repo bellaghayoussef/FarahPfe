@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
 {
-    /*
+     /*
     |--------------------------------------------------------------------------
     | Register Controller
     |--------------------------------------------------------------------------
@@ -29,7 +29,18 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
+    protected function redirectTo()
+    {
+         if ( Auth::user()->hasAnyRole(['admin', 'client']) ) {
+          
+             return '/home';
+                }else{
+               
+                   return '/profileetudiant'; 
+                }
+               
+       
+    }
 
     /**
      * Create a new controller instance.
@@ -50,9 +61,12 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
+            'nom' => ['required', 'string', 'max:255'],
+            'prenom' => ['required', 'string', 'max:255'],
+            'phone' => ['required', 'string'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+           
         ]);
     }
 
@@ -64,10 +78,27 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
-            'name' => $data['name'],
+        
+      
+        $user = User::create([
+            'nom' => $data['nom'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'prenom' => $data['prenom'],
+            'avatar' => 'images/user.jpg',
+            'phone' => $data['phone'],
+            
+           
+            'niveau' => $data['niveau'],
+            'cin' => $data['cin'],
+
+                
+
         ]);
+        
+        $user->assignRole('etudiant');
+        return $user;
     }
 }
+
+

@@ -12,148 +12,109 @@ class TechnosController extends Controller
 {
 
     /**
-     * Display a listing of the technos.
+     * Display a listing of the resource.
      *
-     * @return Illuminate\View\View
+     * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        $technos = techno::with('domain')->paginate(25);
-
-        return view('technos.index', compact('technos'));
+        $technos = Techno::all();
+        return view('techno.index',compact('technos'));
     }
 
     /**
-     * Show the form for creating a new techno.
+     * Show the form for creating a new resource.
      *
-     * @return Illuminate\View\View
+     * @return \Illuminate\Http\Response
      */
     public function create()
     {
-        $domains = Domain::pluck('id','id')->all();
-        
-        return view('technos.create', compact('domains'));
+        $domains = domain::all();
+        return view('techno.create',compact('domains'));
     }
 
     /**
-     * Store a new techno in the storage.
+     * Store a newly created resource in storage.
      *
-     * @param Illuminate\Http\Request $request
-     *
-     * @return Illuminate\Http\RedirectResponse | Illuminate\Routing\Redirector
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        try {
-            
-            $data = $this->getData($request);
-            
-            techno::create($data);
 
-            return redirect()->route('technos.techno.index')
-                ->with('success_message', 'Techno was successfully added.');
-        } catch (Exception $exception) {
+        $validated = $request->validate([
+            'titre' => ['required', 'string', 'max:255', 'unique:technos'],
+           
+        ]);
 
-            return back()->withInput()
-                ->withErrors(['unexpected_error' => 'Unexpected error occurred while trying to process your request.']);
-        }
+        $techno = new Techno();
+        $techno->titre = $request->titre;
+        $techno->domain_id = $request->domain_id;
+        $techno->save();
+        return redirect()->route('techno.index')
+        ->with('success_message', 'techno was successfully added.');
+
+        
     }
 
     /**
-     * Display the specified techno.
+     * Display the specified resource.
      *
-     * @param int $id
-     *
-     * @return Illuminate\View\View
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        $techno = techno::with('domain')->findOrFail($id);
-
-        return view('technos.show', compact('techno'));
+        $techno = Techno::find($id);
+        return view('techno.show',compact('techno'));
     }
 
     /**
-     * Show the form for editing the specified techno.
+     * Show the form for editing the specified resource.
      *
-     * @param int $id
-     *
-     * @return Illuminate\View\View
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        $techno = techno::findOrFail($id);
-        $domains = Domain::pluck('id','id')->all();
 
-        return view('technos.edit', compact('techno','domains'));
+        $techno = Techno::find($id);
+         $domains = domain::all();
+        return view('techno.edit',compact('techno','domains'));
     }
 
     /**
-     * Update the specified techno in the storage.
+     * Update the specified resource in storage.
      *
-     * @param int $id
-     * @param Illuminate\Http\Request $request
-     *
-     * @return Illuminate\Http\RedirectResponse | Illuminate\Routing\Redirector
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
-    public function update($id, Request $request)
+    public function update(Request $request, $id)
     {
-        try {
-            
-            $data = $this->getData($request);
-            
-            $techno = techno::findOrFail($id);
-            $techno->update($data);
+        
 
-            return redirect()->route('technos.techno.index')
-                ->with('success_message', 'Techno was successfully updated.');
-        } catch (Exception $exception) {
+        $techno =  Techno::find($id);
+        $techno->titre = $request->titre;
+        $techno->domain_id = $request->domain_id;
 
-            return back()->withInput()
-                ->withErrors(['unexpected_error' => 'Unexpected error occurred while trying to process your request.']);
-        }        
+        $techno->save();
+        return redirect()->route('techno.index');
     }
 
     /**
-     * Remove the specified techno from the storage.
+     * Remove the specified resource from storage.
      *
-     * @param int $id
-     *
-     * @return Illuminate\Http\RedirectResponse | Illuminate\Routing\Redirector
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        try {
-            $techno = techno::findOrFail($id);
-            $techno->delete();
-
-            return redirect()->route('technos.techno.index')
-                ->with('success_message', 'Techno was successfully deleted.');
-        } catch (Exception $exception) {
-
-            return back()->withInput()
-                ->withErrors(['unexpected_error' => 'Unexpected error occurred while trying to process your request.']);
-        }
+        $techno =  Techno::find($id);
+       
+        $techno->delete();
+        return redirect()->route('techno.index');
     }
 
-    
-    /**
-     * Get the request's data from the request.
-     *
-     * @param Illuminate\Http\Request\Request $request 
-     * @return array
-     */
-    protected function getData(Request $request)
-    {
-        $rules = [
-                'titre' => 'required|string|min:1|max:255',
-            'domain_id' => 'nullable', 
-        ];
-        
-        $data = $request->validate($rules);
-
-
-        return $data;
-    }
 
 }

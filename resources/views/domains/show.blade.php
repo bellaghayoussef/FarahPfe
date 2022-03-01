@@ -2,47 +2,39 @@
 
 @section('content')
 
-<div class="panel panel-default">
-    <div class="panel-heading clearfix">
+<div class="card card-default">
 
-        <span class="pull-left">
-            <h4 class="mt-5 mb-5">{{ isset($domain->title) ? $domain->title : 'Domain' }}</h4>
-        </span>
 
-        <div class="pull-right">
 
-            <form method="POST" action="{!! route('domains.domain.destroy', $domain->id) !!}" accept-charset="UTF-8">
+
+         <div class="card-header">
+                    <h3 class="card-title">{{ isset($domain->title) ? $domain->title : 'Domain' }}</h3>
+                     <form  class="float-right" method="POST" action="{!! route('domains.domain.destroy', $domain->id) !!}" accept-charset="UTF-8">
             <input name="_method" value="DELETE" type="hidden">
             {{ csrf_field() }}
                 <div class="btn-group btn-group-sm" role="group">
                     <a href="{{ route('domains.domain.index') }}" class="btn btn-primary" title="Show All Domain">
-                        <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+                    
+                        <i class="fa fa-list"></i>
                     </a>
 
                     <a href="{{ route('domains.domain.create') }}" class="btn btn-success" title="Create New Domain">
-                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                        <i class="fa fa-plus"></i>
                     </a>
                     
                     <a href="{{ route('domains.domain.edit', $domain->id ) }}" class="btn btn-primary" title="Edit Domain">
-                        <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                        <i class="fa fa-edit"></i>
                     </a>
 
                     <button type="submit" class="btn btn-danger" title="Delete Domain" onclick="return confirm(&quot;Click Ok to delete Domain.?&quot;)">
-                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                        <i class="fa fa-trash"></i>
                     </button>
                 </div>
             </form>
+                </div>
 
-        </div>
-
-    </div>
-
-    <div class="panel-body">
+    <div class="card-body">
         <dl class="dl-horizontal">
-            <dt>Created At</dt>
-            <dd>{{ $domain->created_at }}</dd>
-            <dt>Updated At</dt>
-            <dd>{{ $domain->updated_at }}</dd>
             <dt>Title</dt>
             <dd>{{ $domain->title }}</dd>
 
