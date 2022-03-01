@@ -295,12 +295,7 @@ return [
             'can'  => 'client',
             'icon' => 'fas fa-user-graduate',
         ],
-        [
-            'text' => 'Etudiant Favori',
-            'url'  => 'etudiantfavori',
-            'can'  => 'client',
-            'icon' => 'fas fa-user-graduate',
-        ],
+       
         [
             'text' => 'Profil',
             'url'  => 'user',

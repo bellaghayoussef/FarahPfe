@@ -9,8 +9,7 @@ use App\Models\User;
 use App\Models\Techno;
 use App\Models\Certif;
 use App\Models\domain;
-use App\Models\Question;
-use App\Models\QuestionsOption;
+
 
 use PDF;
 class EtudiantController extends Controller
@@ -202,19 +201,4 @@ class EtudiantController extends Controller
     }
 
 
-
-    public function testpdf(Request $request, $id)
-    {
-        $user = Auth::User();
-        $offre = Offre::find($id);
-         view()->share('test.pdf_view',$request);
-      $pdf = PDF::loadView('test.pdf_view', $request);
-        //return view('test.pdf_view', compact( 'request'));
-      //dd($pdf);
-     $pdf->save(public_path().'/test/'.$user->id.'_'.$offre->id.'.pdf');
-      $user->Offre()->syncWithoutDetaching([$id  => ['test' => '/test/'.$user->id.'_'.$offre->id.'.pdf']]);
-
-
-        return redirect()->route('profileetudiant');
-    }
 }

@@ -143,7 +143,7 @@ class UsersController extends Controller
 
         $user->phone = $request->phone;
         $user->niveau = $request->niveau;
-        $user->matricule = $request->matricule;
+        $user->cin = $request->cin;
         $user->avatar = $avatar;
         $user->save();
         $user->assignRole('etudiant');
@@ -174,7 +174,7 @@ class UsersController extends Controller
 
         $user->phone = $request->phone;
         $user->niveau = $request->niveau;
-        $user->matricule = $request->matricule;
+        $user->cin = $request->cin;
         $user->avatar = $avatar;
         $user->save();
         return redirect()->route('etudiant');

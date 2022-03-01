@@ -53,18 +53,7 @@
                                         </p>
 
 
-                                        <button onclick="favori({{ $user->id }})"
-                                            style="background: transparent;border: transparent;"
-                                            id="favoribtn{{ $user->id }}">
-                                            @if ($user->isfavret == true)
-                                                <i class="fa fa-heart" style="color: red;font-size: x-large;"></i>
-                                            @else
-
-                                                <i class="far fa-heart" style="color: darkgrey;font-size: x-large;"></i>
-
-                                            @endif
-
-                                        </button>
+                                   
 
                                     </div>
                                 </div>
